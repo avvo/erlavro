@@ -25,6 +25,7 @@
 
 -export([ append_file/5
         , decode_file/1
+        , decode_binary/1
         , decode_blocks/5
         , decode_stream/2
         , make_header/1
@@ -56,7 +57,13 @@
         {header(), avro_type(), [avro_object()]} | no_return().
 decode_file(Filename) ->
   {ok, Bin} = file:read_file(Filename),
-  {[ {"magic", Magic}
+  decode_binary(Bin).
+
+%% @doc Decode binary into wrapped values.
+-spec decode_binary(binary()) ->
+        {header(), avro_type(), [avro_object()]} | no_return().
+decode_binary(bin) ->
+   {[ {"magic", Magic}
    , {"meta", Meta}
    , {"sync", Sync}
    ], Tail} = decode_stream(ocf_schema(), Bin),
