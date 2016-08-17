@@ -62,7 +62,7 @@ decode_file(Filename) ->
 %% @doc Decode binary into wrapped values.
 -spec decode_binary(binary()) ->
         {header(), avro_type(), [avro_object()]} | no_return().
-decode_binary(bin) ->
+decode_binary(Bin) ->
    {[ {"magic", Magic}
    , {"meta", Meta}
    , {"sync", Sync}
