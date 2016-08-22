@@ -480,6 +480,10 @@ parse_union({struct, [{ValueTypeNameBin, Value}]},
   %% Union value specified as {"type": <value>}
   ValueTypeName = binary_to_list(ValueTypeNameBin),
   parse_union_ex(ValueTypeName, Value, Type, ExtractFun, IsWrapped, Hook);
+parse_union(Value, {Struct, Types, undefined}, ExtractFun, IsWrapped, Hook) ->
+  Type = hd(Types),
+  {_, {_, ValueTypeName}} = Type,
+  parse_union_ex(ValueTypeName, Value, {Struct, Types, undefined}, ExtractFun, IsWrapped, Hook);
 parse_union(_, _, _, _, _) ->
   erlang:error(wrong_union_value).
 
