@@ -82,7 +82,7 @@ new(Options) ->
     end,
   ets:new(Name, [Access, {read_concurrency, true} | EtsOpts]).
 
-%% @doc Create a new schema store and improt the given schema JSON files.
+%% @doc Create a new schema store and import the given schema JSON files.
 -spec new([proplists:property()], [filename()]) -> store().
 new(Options, Files) ->
   Store = new(Options),
