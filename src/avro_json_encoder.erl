@@ -44,7 +44,9 @@
 %% @end
 -spec encode_type(avro_type()) -> iodata().
 encode_type(Type) ->
-  jsonx:encode(do_encode_type(Type)).
+  Encoder = mochijson3:encoder([{utf8, true}]),
+  Encoder(do_encode_type(Type)).
+  %jsonx:encode(do_encode_type(Type)).
 
 %% @doc Encode avro value in JSON format, use jsonx as default encoder.
 %% fallback to mochijson3 in case of failure
