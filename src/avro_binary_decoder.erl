@@ -164,8 +164,7 @@ prim(Bin, "double") ->
 prim(Bin, "bytes") ->
   bytes(Bin);
 prim(Bin, "string") ->
-  {Bytes, Tail} = bytes(Bin),
-  {binary_to_list(Bytes), Tail}.
+  bytes(Bin).
 
 bytes(Bin) ->
   {Size, Rest} = long(Bin),
