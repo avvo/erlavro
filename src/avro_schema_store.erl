@@ -58,8 +58,6 @@
 
 -export_type([store/0]).
 
--define(IS_STORE(S), (is_integer(S) orelse is_atom(S))).
-
 %%%_* APIs =====================================================================
 
 %% @equiv new([])
@@ -98,12 +96,12 @@ to_lookup_fun(Store) ->
 
 %% @doc Import avro JSON files into schema store.
 -spec import_files([filename()], store()) -> store().
-import_files(Files, Store) when ?IS_STORE(Store) ->
+import_files(Files, Store) ->
   lists:foldl(fun(File, S) -> import_file(File, S) end, Store, Files).
 
 %% @doc Import avro JSON file into schema store.
 -spec import_file(filename(), store()) -> store().
-import_file(File, Store) when ?IS_STORE(Store) ->
+import_file(File, Store) ->
   case file:read_file(File) of
     {ok, Json} ->
       import_schema_json(Json, Store);
@@ -113,7 +111,7 @@ import_file(File, Store) when ?IS_STORE(Store) ->
 
 %% @doc Decode avro schema JSON into erlavro records.
 -spec import_schema_json(binary(), store()) -> store().
-import_schema_json(Json, Store) when ?IS_STORE(Store) ->
+import_schema_json(Json, Store) ->
   Schema = avro_json_decoder:decode_schema(Json),
   add_type(Schema, Store).
 
@@ -127,7 +125,7 @@ close(Store) ->
 %% NOTE: the type is flattened before inserting into the schema store.
 %% i.e. named types nested in the given type are lifted up to root level.
 -spec add_type(avro_type(), store()) -> store().
-add_type(Type, Store) when ?IS_STORE(Store) ->
+add_type(Type, Store) ->
   case avro:is_named_type(Type) of
     true  ->
       {ConvertedType, ExtractedTypes} =
@@ -142,12 +140,12 @@ add_type(Type, Store) when ?IS_STORE(Store) ->
 
 %% @doc Lookup a type using its full name.
 -spec lookup_type(string(), store()) -> {ok, avro_type()} | false.
-lookup_type(FullName, Store) when ?IS_STORE(Store) ->
+lookup_type(FullName, Store) ->
   get_type_from_store(FullName, Store).
 
 %% @doc Lookup a type as in JSON (already encoded) format using its full name.
 -spec lookup_type_json(string(), store()) -> {ok, term()} | false.
-lookup_type_json(FullName, Store) when ?IS_STORE(Store) ->
+lookup_type_json(FullName, Store) ->
   get_type_json_from_store(FullName, Store).
 
 fold(F, Acc0, Store) ->
