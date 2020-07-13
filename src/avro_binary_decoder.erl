@@ -95,7 +95,7 @@ dec(Bin, T, _Lkup, Hook) when ?AVRO_IS_ENUM_TYPE(T) ->
   Hook(T, Index, Tail,
        fun(B) ->
          Symbol = avro_enum:get_symbol_from_index(T, Index),
-         {Symbol, B}
+         {erlang:list_to_binary(Symbol), B}
        end);
 dec(Bin, T, Lkup, Hook) when ?AVRO_IS_ARRAY_TYPE(T) ->
   ItemsType = avro_array:get_items_type(T),
